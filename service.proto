@@ -1,0 +1,135 @@
+syntax="proto3";
+
+package world;
+
+message Request {
+    string Username = 1;    
+}
+
+message Response {
+    string Firstname = 1;
+    string Lastname = 2;
+}
+
+message ThermostatResponse{
+    string Thermostatname    =1;           
+	int32 Currenttemparature =2;       
+	int32 Humdity            =3;      
+    string Systemmode        =4;              
+	string Fanmode           =5;             
+	string MacAddress        =6;        
+	int32 Temperatureoffset  =7;      
+	int32 Heattemplimit      =8;       
+	int32 Cooltemplimit      =9;       
+	string Thermostatfrimwareversion =10;
+    string Thermostatmodel           =11;
+	int32 OutdoorStages             =12;
+	int32 IndoorStages              =13;
+	string Indoorconfiguration       =14;
+	string Outdoorconfiguration      =15;
+	string Batterystatus             =16;
+	string Heatcyclerate             =17;
+	string Coolcyclerate             =18;
+	bool Boostheat                 =19;
+	bool Boostcool                 =20;
+	bool Protection                =21;
+	bool Earlystart                =22;
+	bool Humditydisplay            =23;
+	bool Timedisplay               =24;
+	bool Continuousdisplay         =25;
+	bool TemperatureDisplay        =26;
+	string Addressline1            =27; 
+	string Addressline2            =28;  
+	string City                    =29;
+    string State                   =30;  
+	string Country                 =31; 
+	string Zip                     =32;  
+	string TimeZone                =33;    	
+	int32  Userid	               =34;	
+}
+
+message ThermostatRequest{
+    int64 Thermostatid = 1;
+}
+
+message CreateThermostatResponse{	
+	bool Info =1;
+}
+
+message TemperatureRequest{
+	int64 Thermostatid = 1;
+	int64 Temperature = 2;
+}
+
+message FanmodeRequest{
+	int64 Thermostatid = 1;
+	string Fanmode = 2;
+}
+
+message SystemmodeRequest{
+	int64 Thermostatid= 1;
+	string Systemmode = 2;
+}
+
+message ListthermostatRequest{
+	int64 Userid = 1;
+}
+
+message ListthermostatResponse{
+	repeated Thermostats thermostats =1; 
+}
+
+message Thermostats{
+	string Groupname=1;
+	string Thermostatname =2;
+	int32 Currenttemparature=3;
+	string Sechudle=4;
+}
+message GroupRequest{
+	int64 Userid = 1;
+	string Groupname =2;
+}
+
+message GroupResponse{
+	bool Status =1;
+}
+
+message GroupchangeRequest{
+	int64 Username=1;
+	int64 Thermostatid=2;
+	int64 Groupid = 3;	
+}
+
+message GroupchangeResponse{
+	bool Status = 1;
+}
+
+message LocationRequest{
+    string Location = 1;
+}
+
+message LocationResponses{
+    repeated LocationResponse locationresponse = 1;
+}
+
+message LocationResponse{
+   string Thermostatname =1;
+   int64  Thermostatid = 2;
+   int64  Currenttemp = 3;
+}
+
+service AddService{
+	rpc LocationGroup(LocationRequest) returns(LocationResponses){};
+	rpc Groupadd(GroupchangeRequest) returns(GroupchangeResponse){};
+	rpc Groupnamecreate(GroupRequest)returns(GroupResponse);
+	rpc ListThermostat(ListthermostatRequest)returns(ListthermostatResponse){};
+	rpc SystemMode(SystemmodeRequest) returns(CreateThermostatResponse);
+	rpc Fanmode(FanmodeRequest)returns(CreateThermostatResponse);
+	rpc Settemperature(TemperatureRequest) returns(CreateThermostatResponse);
+    rpc Usernames(Request) returns (Response);
+	rpc DeleteThermostat(ThermostatRequest) returns(CreateThermostatResponse);
+	rpc GetThermostat(ThermostatRequest) returns(ThermostatResponse);
+	rpc CreaThermostat(ThermostatResponse)returns(CreateThermostatResponse);	
+	
+}
+
